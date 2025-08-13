@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Myntra Clone</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f4f4;
+}
+header {
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+header nav a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+}
+.banner {
+  background: #ff3f6c;
+  color: white;
+  padding: 50px;
+  text-align: center;
+}
+.categories {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+.category {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.product-card {
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+button {
+  background: #ff3f6c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Myntra Clone</h1>
+  <nav>
+    <a href="#" onclick="showHome()">Home</a>
+    <a href="#" onclick="showProducts()">Products</a>
+    <a href="#" onclick="showCart()">Cart 🛒</a>
+  </nav>
+</header>
+
+<div id="app"></div>
+
+<script>
+let products = [
+  {id:1, name:"T-Shirt", price:499, image:"https://via.placeholder.com/200"},
+  {id:2, name:"Jeans", price:999, image:"https://via.placeholder.com/200"},
+  {id:3, name:"Shoes", price:1999, image:"https://via.placeholder.com/200"}
+];
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function showHome(){
+  document.getElementById("app").innerHTML = `
+    <section class="banner">
+      <h2>Welcome to Myntra Clone</h2>
+      <p>Shop the latest trends</p>
+    </section>
+    <section class="categories">
+      <div class="category">Men</div>
+      <div class="category">Women</div>
+      <div class="category">Kids</div>
+    </section>
+  `;
+}
+
+function showProducts(){
+  let html = `<section class="product-grid">`;
+  products.forEach(p=>{
+    html += `
+      <div class="product-card">
+        <img src="${p.image}" width="100%">
+        <h3>${p.name}</h3>
+        <p>₹${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      </div>
+    `;
+  });
+  html += `</section>`;
+  document.getElementById("app").innerHTML = html;
+}
+
+function addToCart(id){
+  let item = cart.find(c=>c.id===id);
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({id, qty:1});
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Added to cart");
+}
+
+function showCart(){
+  if(cart.length === 0){
+    document.getElementById("app").innerHTML = "<p>Your cart is empty</p>";
+    return;
+  }
+  let total = 0;
+  let html = `<section>`;
+  cart.forEach(item=>{
+    let p = products.find(prod=>prod.id===item.id);
+    let subtotal = p.price * item.qty;
+    total += subtotal;
+    html += `<p>${p.name} (x${item.qty}) - ₹${subtotal}</p>`;
+  });
+  html += `<p><b>Total:</b> ₹${total}</p>
+           <button onclick="checkout()">Checkout</button>
+           </section>`;
+  document.getElementById("app").innerHTML = html;
+}
+
+function checkout(){
+  document.getElementById("app").innerHTML = `
+    <form onsubmit="placeOrder(event)">
+      <label>Name:</label><input type="text" required><br>
+      <label>Address:</label><textarea required></textarea><br>
+      <label>Payment Method:</label>
+      <select required>
+        <option>Credit Card</option>
+        <option>UPI</option>
+        <option>Cash on Delivery</option>
+      </select><br>
+      <button type="submit">Place Order</button>
+    </form>
+  `;
+}
+
+function placeOrder(e){
+  e.preventDefault();
+  alert("Order placed successfully!");
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  showHome();
+}
+
+showHome();
+</script>
+
+</body>
+</html>
