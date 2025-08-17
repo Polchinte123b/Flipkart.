@@ -1,239 +1,150 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Mini Chat Q&A</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{
-      --bg:#0f172a;        /* slate-900 */
-      --panel:#111827;     /* gray-900 */
-      --card:#0b1220;      /* deep blue */
-      --bot:#1f2937;       /* gray-800 */
-      --user:#2563eb;      /* blue-600 */
-      --text:#e5e7eb;      /* gray-200 */
-      --muted:#94a3b8;     /* slate-400 */
-      --accent:#22d3ee;    /* cyan-400 */
-      --ring:#60a5fa;      /* blue-400 */
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background: radial-gradient(1200px 600px at 10% -10%, #0b2545 0%, transparent 60%),
-                  radial-gradient(1000px 500px at 100% 0%, #0b3d91 0%, transparent 60%),
-                  var(--bg);
-      color:var(--text);
-      font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-      height:100dvh; display:flex; align-items:center; justify-content:center;
-    }
-    .app{
-      width:min(900px, 96vw);
-      height:min(780px, 94vh);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:20px; backdrop-filter: blur(8px);
-      display:flex; flex-direction:column; overflow:hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-    }
-    header{
-      padding:14px 18px; display:flex; align-items:center; gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(34,211,238,.10), transparent);
-    }
-    .logo{
-      width:34px; height:34px; border-radius:10px;
-      background: conic-gradient(from 180deg, var(--accent), #8b5cf6, #f472b6, var(--accent));
-      box-shadow: inset 0 0 20px rgba(255,255,255,.25);
-    }
-    header h1{font-size:16px; margin:0}
-    header p{margin:0; color:var(--muted); font-size:13px}
-    .scroll{
-      flex:1; overflow:auto; padding:18px; background:
-        radial-gradient(600px 300px at 80% 0%, rgba(34,211,238,.08), transparent 60%),
-        radial-gradient(900px 450px at 0% 20%, rgba(139,92,246,.08), transparent 60%);
-    }
-    .msg{
-      max-width:72ch; padding:12px 14px; margin:8px 0; border-radius:14px;
-      word-wrap:break-word; white-space:pre-wrap;
-      border:1px solid rgba(255,255,255,.06)
-    }
-    .bot{ background:var(--bot); }
-    .user{ background:var(--user); align-self:flex-end; }
-    .meta{ font-size:12px; color:var(--muted); margin-top:4px }
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px }
-    .chip{
-      background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.2);
-      padding:6px 10px; border-radius:999px; cursor:pointer; font-size:13px
-    }
-    .chip:hover{ border-color:var(--ring) }
-    form{
-      padding:12px; display:flex; gap:10px; border-top:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(0deg, rgba(31,41,55,.5), rgba(31,41,55,.3));
-    }
-    input[type="text"]{
-      flex:1; background:var(--panel); color:var(--text);
-      border:1px solid rgba(255,255,255,.12); border-radius:12px;
-      padding:14px 14px; font-size:16px; outline:none;
-    }
-    input[type="text"]:focus{ border-color:var(--ring); box-shadow:0 0 0 4px rgba(96,165,250,.15) }
-    button{
-      background:var(--accent); color:#042a2b; border:0; border-radius:12px;
-      padding:14px 16px; font-weight:600; cursor:pointer; font-size:15px;
-    }
-    button:active{ transform:translateY(1px) }
-    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TeeStore (Single File)</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a23;--text:#eef2f7;--muted:#9aa3af;--accent:#3b82f6;--border:rgba(255,255,255,.12);--card:#141826;--ok:#10b981}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-bottom:1px solid var(--border)}
+  .container{width:min(1200px,94vw);margin:0 auto}.nav{display:flex;gap:12px;align-items:center;padding:12px 0}
+  .logo{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 180deg,var(--accent),#8b5cf6,#f472b6,var(--accent))}
+  .search{flex:1;display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:8px 10px}
+  .search input{flex:1;background:transparent;border:0;color:var(--text);outline:none}
+  .cart-btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding:16px 0}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .card img{width:100%;aspect-ratio:3/4;object-fit:cover;background:#0a0d14}
+  .pad{padding:10px 12px}.title{font-weight:700}.muted{color:var(--muted);font-size:13px}
+  .price{display:flex;gap:8px;align-items:center}.badge{background:#10b98122;color:#10b981;border:1px solid #10b98155;font-size:12px;padding:2px 6px;border-radius:999px}
+  .add{background:var(--accent);color:white;border:0;padding:10px;border-radius:10px;font-weight:700;cursor:pointer;margin-left:auto}
+  .drawer{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:50}.drawer.open{display:block}
+  .panel{position:absolute;right:0;top:0;bottom:0;width:min(380px,96vw);background:#0f131e;border-left:1px solid var(--border);display:flex;flex-direction:column}
+  .panel header{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border)}
+  .items{flex:1;overflow:auto;padding:12px}.row{display:flex;justify-content:space-between}
+  .qty{display:flex;gap:6px;align-items:center}.qty button{width:26px;height:26px;border-radius:8px;background:#0b1220;border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .remove{background:transparent;border:0;color:#fca5a5;cursor:pointer}
+  .foot{border-top:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:10px}
+  .checkout{background:var(--ok);color:#04210f;border:0;border-radius:10px;padding:12px;font-weight:800;cursor:pointer}
+</style>
 </head>
 <body>
-  <div class="app" role="application" aria-label="Mini Chat Q and A">
-    <header>
+  <header>
+    <div class="container nav">
       <div class="logo" aria-hidden="true"></div>
-      <div>
-        <h1>Mini Chat Q&A</h1>
-        <p>Type a question or say “help” to see topics</p>
+      <strong>TeeStore</strong>
+      <div class="search"><input id="q" placeholder="Search tees…"></div>
+      <button id="open" class="cart-btn">🛒 <span id="count">0</span></button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="grid" class="grid" aria-live="polite"></div>
+  </main>
+
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div class="panel">
+      <header><h3>Your Cart</h3><button id="close" class="remove">✕</button></header>
+      <div id="items" class="items"></div>
+      <div class="foot">
+        <div class="row"><span>Subtotal</span><span>₹ <b id="subtotal">0</b></span></div>
+        <button id="checkout" class="checkout">Checkout</button>
       </div>
-    </header>
-
-    <div id="log" class="scroll" aria-live="polite"></div>
-
-    <form id="form" autocomplete="off">
-      <label class="sr-only" for="box">Message</label>
-      <input id="box" type="text" placeholder="Ask a question... e.g., What is AI?" />
-      <button id="send" type="submit">Send</button>
-    </form>
+    </div>
   </div>
 
-  <script>
-    // ---- 1) Your Top 10 Q&A (edit me) ---------------------------------------
-    // Tip: change questions/answers to your topic. Add keywords to improve matching.
-    const FAQS = [
-      { q: "What is AI?", a: "Artificial Intelligence is the field of making computers perform tasks that typically need human intelligence, such as understanding language, recognizing images, or making decisions.", tags:["ai","artificial intelligence","intro"] },
-      { q: "What is machine learning?", a: "Machine learning is a way for computers to learn patterns from data and improve at a task without being explicitly programmed for each rule.", tags:["ml","learning","patterns"] },
-      { q: "What is deep learning?", a: "Deep learning uses multi-layer neural networks to learn complex patterns. It powers speech recognition, vision, and large language models.", tags:["neural networks","dl"] },
-      { q: "How does ChatGPT work?", a: "It’s a transformer-based language model that predicts the next word based on patterns learned from large amounts of text, then is refined with human feedback.", tags:["gpt","transformer","llm"] },
-      { q: "What is a neural network?", a: "A neural network is a set of layers with weights that transform inputs to outputs. During training the weights adjust to reduce error.", tags:["neurons","layers","weights"] },
-      { q: "What is overfitting?", a: "Overfitting is when a model memorizes training data and performs poorly on new data. Fixes include more data, regularization, and simpler models.", tags:["generalization","regularization"] },
-      { q: "Supervised vs unsupervised learning?", a: "Supervised uses labeled data to learn input→output mapping. Unsupervised looks for structure in unlabeled data, like clustering.", tags:["labels","clustering"] },
-      { q: "What is reinforcement learning?", a: "An agent learns by taking actions, receiving rewards, and improving a policy to maximize long-term reward.", tags:["rl","policy","reward"] },
-      { q: "What is NLP?", a: "Natural Language Processing is about enabling computers to understand and generate human language, like translation and Q&A.", tags:["language","text","nlp"] },
-      { q: "What is an API?", a: "An API is a defined way for software to talk to other software. You send requests and receive structured responses.", tags:["interface","requests"] },
-    ];
+<script>
+const IMG = (label,bg="#111827",fg="#e5e7eb") =>
+  'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="${bg}"/><stop offset="100%" stop-color="#0b1020"/></linearGradient></defs>
+      <rect width="100%" height="100%" fill="url(#g)"/>
+      <text x="50%" y="50%" text-anchor="middle" fill="${fg}" font-size="48" font-family="Arial">`+label+`</text>
+    </svg>`);
 
-    // ---- 2) Simple matcher (token Jaccard + keyword assist) -----------------
-    const STOP = new Set("a an the is are was were to of for in on at and or as by with from that this those these what how why when where which".split(" "));
-    const norm = s => s.toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
-    function tokens(s){
-      return new Set(norm(s).split(" ").filter(w => w && !STOP.has(w)));
-    }
-    function jaccard(a, b){
-      const A = tokens(a), B = tokens(b);
-      let inter = 0;
-      for (const w of A) if (B.has(w)) inter++;
-      const union = new Set([...A, ...B]).size || 1;
-      return inter / union;
-    }
-    function bestMatch(input){
-      // Score against question + tags; pick the highest
-      const scored = FAQS.map(item => {
-        const hay = item.q + " " + (item.tags||[]).join(" ");
-        // small boost if every tag word is present
-        let score = jaccard(input, hay);
-        for(const t of (item.tags||[])){
-          if (norm(input).includes(norm(t))) score += 0.05;
-        }
-        return { item, score };
-      }).sort((a,b)=>b.score-a.score);
+// Inline products so no fetch is needed
+const PRODUCTS = [
+  {id:"tee-001",title:"Classic Black Tee",price:699,mrp:999,popularity:98,rating:4.7,addedAt:"2025-05-20",sizes:["S","M","L","XL"],colors:["black"],image:IMG("Black","#0b0f19","#e5e7eb")},
+  {id:"tee-002",title:"Classic White Tee",price:599,mrp:899,popularity:92,rating:4.6,addedAt:"2025-05-12",sizes:["S","M","L","XL","XXL"],colors:["white"],image:IMG("White","#f3f4f6","#111827")},
+  {id:"tee-003",title:"Navy Blue Tee",price:649,mrp:999,popularity:90,rating:4.5,addedAt:"2025-04-30",sizes:["M","L","XL"],colors:["navy"],image:IMG("Navy","#0f274a","#e5e7eb")},
+  {id:"tee-004",title:"Charcoal Grey Tee",price:629,mrp:949,popularity:88,rating:4.4,addedAt:"2025-04-18",sizes:["S","M","L"],colors:["grey"],image:IMG("Grey","#374151","#e5e7eb")}
+];
 
-      const best = scored[0];
-      const suggestions = scored.slice(1,4).map(s=>s.item.q);
-      return { best, suggestions };
-    }
+const state = { q:"", cart:{}, cartKey:"teestore_sf_cart" };
+const $ = s => document.querySelector(s);
+const $$ = (s,root=document) => Array.from(root.querySelectorAll(s));
+const money = n => new Intl.NumberFormat('en-IN').format(n);
+const pct = (p,m)=> m>p ? Math.round(((m-p)/m)*100) : null;
 
-    // ---- 3) UI helpers -------------------------------------------------------
-    const log = document.getElementById("log");
-    const form = document.getElementById("form");
-    const box  = document.getElementById("box");
+function loadCart(){ try{ state.cart = JSON.parse(localStorage.getItem(state.cartKey)||"{}"); }catch{ state.cart = {}; } }
+function saveCart(){ localStorage.setItem(state.cartKey, JSON.stringify(state.cart)); }
+function cartCount(){ return Object.values(state.cart).reduce((s,i)=>s+i.qty,0); }
+function cartSubtotal(){ return Object.values(state.cart).reduce((s,i)=> s + (PRODUCTS.find(p=>p.id===i.id)?.price||0)*i.qty, 0); }
+function addToCart(id){ state.cart[id] = {id, qty:(state.cart[id]?.qty||0)+1}; saveCart(); badge(); }
 
-    function addMsg(text, who="bot"){
-      const wrap = document.createElement("div");
-      wrap.style.display = "flex";
-      wrap.style.flexDirection = "column";
-      wrap.style.alignItems = who === "user" ? "flex-end" : "flex-start";
+function badge(){ $("#count").textContent = cartCount(); }
 
-      const bubble = document.createElement("div");
-      bubble.className = `msg ${who}`;
-      bubble.textContent = text;
-      wrap.appendChild(bubble);
+function render(){
+  const grid = $("#grid"); grid.innerHTML = "";
+  const list = PRODUCTS.filter(p => (p.title).toLowerCase().includes(state.q));
+  list.forEach(p=>{
+    const off = pct(p.price,p.mrp);
+    const el = document.createElement("div");
+    el.className="card";
+    el.innerHTML = `
+      <img src="${p.image}" alt="${p.title}">
+      <div class="pad">
+        <div class="title">${p.title}</div>
+        <div class="price"><strong>₹${money(p.price)}</strong> <s class="muted">₹${money(p.mrp)}</s> ${off?`<span class="badge">${off}% off</span>`:""}</div>
+        <div style="display:flex;align-items:center;gap:8px"><small class="muted">⭐ ${p.rating}</small><button class="add" data-id="${p.id}">Add</button></div>
+      </div>`;
+    grid.appendChild(el);
+  });
+  $$(".add",grid).forEach(b=> b.onclick = ()=>{ addToCart(b.dataset.id); });
+}
 
-      log.appendChild(wrap);
-      log.scrollTop = log.scrollHeight;
-    }
+function renderCart(){
+  const box = $("#items"); box.innerHTML = "";
+  for(const [key,it] of Object.entries(state.cart)){
+    const p = PRODUCTS.find(x=>x.id===it.id); if(!p) continue;
+    const row = document.createElement("div");
+    row.style.borderBottom = "1px solid var(--border)";
+    row.style.padding = "8px 0";
+    row.innerHTML = `
+      <div class="row"><strong>${p.title}</strong><button class="remove" data-key="${key}">Remove</button></div>
+      <div class="qty"><button class="d" data-key="${key}">-</button><span>${it.qty}</span><button class="i" data-key="${key}">+</button><span style="margin-left:auto">₹${money(p.price*it.qty)}</span></div>`;
+    box.appendChild(row);
+  }
+  $("#subtotal").textContent = money(cartSubtotal());
+  $$(".remove",box).forEach(b=> b.onclick=()=>{ delete state.cart[b.dataset.key]; saveCart(); renderCart(); badge(); });
+  $$(".i",box).forEach(b=> b.onclick=()=>{ state.cart[b.dataset.key].qty++; saveCart(); renderCart(); badge(); });
+  $$(".d",box).forEach(b=> b.onclick=()=>{ state.cart[b.dataset.key].qty--; if(state.cart[b.dataset.key].qty<=0) delete state.cart[b.dataset.key]; saveCart(); renderCart(); badge(); });
+}
 
-    function addBotWithChips(text, labels=[]){
-      addMsg(text, "bot");
-      if (!labels.length) return;
-      const chips = document.createElement("div");
-      chips.className = "chips";
-      labels.forEach(l=>{
-        const b = document.createElement("button");
-        b.className = "chip"; b.type="button"; b.textContent = l;
-        b.addEventListener("click", ()=> {
-          send(l);
-        });
-        chips.appendChild(b);
-      });
-      log.lastElementChild.appendChild(chips);
-      log.scrollTop = log.scrollHeight;
-    }
+async function checkout(){
+  const items = Object.values(state.cart).map(x=>({id:x.id,qty:x.qty}));
+  const subtotal = cartSubtotal();
+  if(!items.length){ alert("Your cart is empty."); return; }
+  try{
+    const res = await fetch("http://localhost:4000/api/orders",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items,subtotal})});
+    if(!res.ok) throw new Error("No API");
+    const data = await res.json();
+    alert("Order placed. ID: "+data.orderId);
+    state.cart = {}; saveCart(); renderCart(); badge();
+  }catch{
+    alert("Checkout demo: no backend detected. When you run the API at http://localhost:4000, orders will save to your database.");
+  }
+}
 
-    function showTopics(){
-      addBotWithChips("Here are the topics I know. Tap one to ask:", FAQS.map(f=>f.q));
-    }
-
-    function help(){
-      addBotWithChips("Try asking one of these, or type your own:", FAQS.slice(0,5).map(f=>f.q));
-    }
-
-    // ---- 4) Chat logic -------------------------------------------------------
-    function replyTo(input){
-      const trimmed = input.trim();
-      if (!trimmed) return;
-
-      if (["help","/help","commands"].includes(trimmed.toLowerCase())){
-        help(); return;
-      }
-      if (trimmed.toLowerCase().startsWith("show topics") || trimmed.toLowerCase()==="topics"){
-        showTopics(); return;
-      }
-
-      const { best, suggestions } = bestMatch(trimmed);
-      const threshold = 0.18; // tweak if you like
-
-      if (best.score >= threshold){
-        addMsg(best.item.a, "bot");
-      } else {
-        addBotWithChips(
-          "I don't have that one yet. Try one of these:",
-          suggestions.length ? suggestions : FAQS.slice(0,3).map(f=>f.q)
-        );
-      }
-    }
-
-    function send(text){
-      const value = typeof text === "string" ? text : box.value;
-      if (!value.trim()) return;
-      addMsg(value.trim(), "user");
-      box.value = "";
-      setTimeout(()=> replyTo(value), 120);
-    }
-
-    form.addEventListener("submit", e => { e.preventDefault(); send(); });
-    box.addEventListener("keydown", e => {
-      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
-    });
-
-    // ---- 5) Greet ------------------------------------------------------------
-    addMsg("Hi! I can answer my top 10 preset questions. Type “help” or “show topics”.", "bot");
-  </script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  loadCart(); badge(); render();
+  $("#q").oninput = e => { state.q = e.target.value.trim().toLowerCase(); render(); };
+  $("#open").onclick = ()=>{ $("#drawer").classList.add("open"); renderCart(); };
+  $("#close").onclick = ()=>{ $("#drawer").classList.remove("open"); };
+  $("#checkout").onclick = checkout;
+});
+</script>
 </body>
 </html>
